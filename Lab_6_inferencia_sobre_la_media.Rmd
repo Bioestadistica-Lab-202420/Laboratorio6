@@ -168,13 +168,12 @@ paste("Número de datos x2:", n2)
 paste("Coeficiente de correlación x2:", r2[1, 2])
 
 ```
+
 -   ***Conclusiones:***
 
-    ***Normalidad de X1:** Como el valor de r crítico para un n=75 y una significancia del 0.01 es de 0.9771, y el coeficiente de correlación (r1) entre q1 y x1_sorted es 0.9614, tenemos que r1 < r crítico y, por ende, se rechaza H0; es decir, los datos de calorias de las bebidas de Starbucks no conforman una distribución normal.*
+    ***Normalidad de X1:** Como el valor de r crítico para un n=75 y una significancia del 0.01 es de 0.9771, y el coeficiente de correlación (r1) entre q1 y x1_sorted es 0.9614, tenemos que r1 \< r crítico y, por ende, se rechaza H0; es decir, los datos de calorias de las bebidas de Starbucks no conforman una distribución normal.*
 
-    **Normalidad de X2:** *Como el valor de r crítico para un n=75 y una significancia del 0.01 es de 0.9771, y el coeficiente de correlación (r2) entre q2 y x2_sorted es 0.9836, tenemos que r2 > r crítico y, por ende, no se rechaza H0; es decir, los datos de carbohidratos de las bebidas de Starbucks conforman una distribución normal.*
-
-
+    **Normalidad de X2:** *Como el valor de r crítico para un n=75 y una significancia del 0.01 es de 0.9771, y el coeficiente de correlación (r2) entre q2 y x2_sorted es 0.9836, tenemos que r2 \> r crítico y, por ende, no se rechaza H0; es decir, los datos de carbohidratos de las bebidas de Starbucks conforman una distribución normal.*
 
 2.  En caso de no cumplir con el supuesto de normalidad, aplique la transformación correspondiente para cada variable (puede aplicar la transformación de potencia u otra transformación).
 
@@ -221,26 +220,29 @@ r1 <- cor(cbind(q1, x1_sorted))
 a.  Plantee su prueba de hipótesis.
 
 $$
-H_0 = 150 \\
-H_1:
+H_0 : \mu_1= 150 \\
+H_1: \mu_1 \neq 150
 $$
 
 b.  Realice la prueba para la inferencia sobre la media de las calorías. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función integrada en R (`t.test()`)
 
 ```{r, warning=FALSE}
-test <- t.test(datos$Carbs, , alternative = "two.sided", mu=20)
+valor_miu<- (150^lambda - 1) /lambda
+test <- t.test(x1_transformado, , alternative = "two.sided", mu=valor_miu)
 print(test)
 ```
 
 c.  Indique los intervalos del 95% de confiabilidad para la inferencia de la media de las calorías. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función integrada en R (`t.test()`)
 
 ```{r, warning=FALSE}
-
+intervalo_confianza<-test$conf.int
+print(intervalo_confianza)
+print(valor_miu)
 ```
 
 d.  Concluya respecto a su hipótesis.
 
--   *Conclusión:*
+-   *Conclusión: Con un intervalo de confianza del 95%, se observa que el valor de* $\mu_1$ *no se encuentra dentro del rango obtenido para la prueba de interferencia sobre la media de las calorías. El intervalo de confianza está comprendido entre 19.404 y 24.094, mientras que el valor de la media transformada es de 26.790, lo que indica que el estadístico de prueba no se encuentra dentro de este rango. Adicionalmente, se obtuvo un p-value de 5.452e-05, que es significativamente menor a una significancia de 0.05. Por lo tanto, se rechaza la hipótesis nula* ($H_0$) *que sugiere que las bebidas de Starbucks tienen un valor promedio de 150 calorías.*
 
 4.  ¿Sería apropiado considerar valores de 20 gramos de carbohidratos en promedio para las bebidas de Starbucks?
 
