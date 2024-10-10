@@ -1,0 +1,237 @@
+---
+title: "Lab 5 - Inferencia sobre la media"
+author: "Diego Martinez"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Laboratorio 6: Inferencias sobre la media de una población
+
+### Lecturas recomendadas
+
+-   Capítulo 5.4 - Johnson, Richard A.; Wichern, Dean W. (2007). Applied Multivariate Statistical Analysis. Pearson Education. [https://www.webpages.uidaho.edu/book-link.pdf](https://www.webpages.uidaho.edu/~stevel/519/Applied%20Multivariate%20Statistical%20Analysis%20by%20Johnson%20and%20Wichern.pdf)
+
+### Instalaciones previas para poder generar el documento en PDF del archivo
+
+Para poder generar el documento en PDF será necesario instalar nuevas librerías (adicional a la de `knitr`). Para esto deberán copiar y pegar los siguientes comandos en la consola de R
+
+```         
+install.packages("knitr") 
+install.packages("rmarkdown") 
+install.packages("tinytex") 
+tinytex::install_tinytex()
+```
+
+> En el caso de que ya tuvieran instaladas estas librerías les aparecerá una ventana indicando si desean reiniciar la sesión de R para actualizar o instalar dichas librerías. Tendrán que seleccionar "Si". Esto reiniciará la sesión de R y volverá a aparecer la misma ventana. En esta oportunidad deberán seleccionar la opción "No" para poder continuar con la instalación (o actualización) de estas librerías.
+
+## El caso univariado
+
+En el caso de una sola variable se puede plantear la siguiente hipótesis:
+
+$$
+H_0:\mu = \mu_o \\
+H_1:\mu \neq \mu_o
+$$
+
+$H_o$ es la hipótesis nula y $H_1$ es la hipótesis alterna de dos colas. Si $x_{1,} x_{2\;,} x_3 ,\ldotp \ldotp \ldotp \ldotp x_n$ denotan una muestra aleatoria de una población normal, el test estadístico que nos sirva para evaluar $H_o$ es: $t=\frac{\left(\bar{X} -\mu_o \right)}{\frac{s}{\sqrt{n}}}$ donde, $\bar{X}$ y $s$ son la media y la desviación estandar de la muestra. Uno rechaza $H_o$ si el valor observado de $\left|t\right|$ excede un valor critico de la distribución t con n-1 grados de libertad (df). Rechazar $H_o$ si $\left|t\right|$ es grande es lo mismo que rechazar $H_o$ si $t^2$ es grande:
+
+$$
+t^2 =\frac{{n\left(\bar{X} -\mu_o \right)}^2 }{s^2 }=n\left(\bar{X} -\mu_o \right){\left(s^2 \right)}^{-1} \left(\bar{X} -\mu_o \right)
+$$
+
+$t^2$ es la distancia al cuadrado de la media de la muestra $\bar{X}$ a $\mu_{0}$. Las unidades están expresadas en unidades de $\frac{s}{\sqrt{n}}$. Una vez $\bar{X}$ y $s^2$ se observa (de la muestra) el test se convierte en: rechazo $H_o$ si:
+
+$$
+n\left(\bar{X} -\mu_o \right){\left(s^2 \right)}^{-1} \left(\bar{X} -\mu_o \right)>{t_{n-1} }^2 \left(\frac{\alpha }{2}\right)
+$$
+
+donde ${t_{n-1} }^2 \left(\frac{\alpha }{2}\right)$ denota el percentil superior $100\left(\frac{\alpha }{2}\right)$ de la distribución $t$ con $n-1$ df.
+
+Si $H_o$ no se rechaza se concluye que $\mu_o$ es un valor posible de la media de la población. El intervalo de confianza contiene los valores de $\mu_o$ que pasan la prueba de hipótesis y se convierten en la región de posibles valores de la media.
+
+$$ 
+\left(\bar{X} -{t_{n-1} }^2 \left(\frac{\alpha }{2}\right)*\frac{s}{\sqrt{n}}\right)\le \mu_o \le \left(\bar{X} +{t_{n-1} }^2 \left(\frac{\alpha }{2}\right)*\frac{s}{\sqrt{n}}\right) 
+$$
+
+Este intervalo es un intervalo aleatorio en la medida que antes de colectar la media y la varianza existen muchos intervalos posibles. De esta manera la potabilidad que intervalo contenga $\mu$ es $\left(1-\frac{\alpha }{2}\right)$.
+
+## El caso de más de una variable
+
+si X tiene más de 1 columna, con variables correlacionadas las conceptos anteriores se pueden extender de forma natural. La distancia entre $\bar{X}$ y $\mu_{o}$ (ahora vectores con las dimensiones de las columnas de X) es:
+
+$$ 
+T^2 =n\left(\bar{X} -\mu_o \right){\left(S^2 \right)}^{-1} \left(\bar{X} -\mu_o \right) 
+$$
+
+donde S es la matriz varianza-covarianza. Si $T^2$ es muy grande $\bar{X}$ y $\mu$ estan muy lejos el uno del otro. $T^2$ esta distribuida $\frac{p\left(n-1\right)}{n-p}F_{p,n-p}$ es decir una distribución F con p,n-p df.
+
+En la construcción de $T^2$ note que $\left(\bar{X} -\mu_o \right)$ tiene distribución normal, ${\left(S^2 \right)}^{-1}$ tiene distribución normal, de tal manera que la multiplicación de Normal x Chi x Normal resulta en una F. Al igual que el caso univariado, rechazo si T2 es muy grande:
+
+$$ 
+T^2 > \frac{p\left(n-1\right)}{n-p}F_{p,n-p} \left(\alpha \right) 
+$$
+
+Este indicador se conoce como la **prueba de Hotelling**. Para una sola variable se usa la prueba t y para p variables la prueba F.
+
+## Regiones de confianza
+
+Si $\theta$ es un vector de parámetros desconocidos sobre una población y $\ominus$ es el set de todos los posibles valores de $\theta$, una región de confianza es una región de valores posibles de $\theta$. Esta región esta determinada por los datos y la denotamos como $R(X)$ donde $X=X_1 ,X_2 ,\ldotp \ldotp \ldotp X_p$. Una región $R(X)$ se denota como una región de confianza al $100\left(\frac{\alpha }{2}\right)$, si:
+
+$$ 
+P\left\lbrack R\left(X\right)\;\mathrm{will}\;\mathrm{cover}\;\theta \right\rbrack =\;1-\alpha
+$$
+
+La región de confianza para una población de media $\mu$ y $p$ dimensiones está definida por:
+
+$$
+P\left\lbrack n\left(\bar{X} -\mu_o \right){\left(S^2 \right)}^{-1} \left(\bar{X} -\mu_o \right)\le \frac{p\left(n-1\right)}{n-p}F_{p,n-p} \left(\alpha \right)\right\rbrack =1-\alpha
+$$
+
+Cuando $p$ es igual a 2, se puede construir un elipsoide de confianza y sus longitudes relativas basado en los valores propios $\lambda_i$ y los vectores propios $e_i$ de $S$:
+
+$$
+\bar{X} \pm {\sqrt{\lambda }}_i \sqrt{\frac{p\left(n-1\right)}{n-p}F_{p,n-p} \left(\alpha \right)}e_i
+$$
+
+El elipsoide se puede construir con su respectiva ecuación paramétrica:
+
+$$
+X=\bar{X}+a*\cos{t}*e_1+b*\sin{t}*e_2
+$$
+
+Donde $e_1$ y $e_2$ corresponden a los valores propios de $S$, y $a$ y $b$ corresponden a los semiejes de la elipse, los cuales están definidos por los valores propios de $S$:
+
+$$
+a=\ \sqrt{\lambda_1}\sqrt{\frac{\left(n-1\right)p}{\left(n-p\right)}F_{p,n-p\left(\alpha\right)}} \\
+b=\ \sqrt{\lambda_2}\sqrt{\frac{\left(n-1\right)p}{\left(n-p\right)}F_{p,n-p\left(\alpha\right)}}
+$$
+
+# Ejercicios
+
+## Parte 1: Evaluación de la media de una variable
+
+Starbucks, una cadena de cafés estadounidense fundada en Seattle, creó una base de datos con la información nutricional de todas las bebidas que ofrece en su menú como parte de una evaluación de nutrición en salud pública realizada por la OMS. Toda la información nutricional de las bebidas corresponde a una ración de 12 onzas. De las 6 variables nutricionales indicadas[^1], se seleccionaron únicamente dos:
+
+[^1]: <https://www.kaggle.com/datasets/starbucks/starbucks-menu>
+
+-   $X_1$: Calorías
+
+-   $X_2$: Carbohidratos (g)
+
+Cada uno de los datos para estas variables fueron registrados en la hoja de cálculo “Datos_Starbucks.xlsx”. Para estas dos variables:
+
+1.  Evalúe la normalidad univariada (*Q-Q plot*) de las variables bajo un nivel de significancia del 1%.
+
+```{r, warning=FALSE}
+
+```
+
+2.  En caso de no cumplir con el supuesto de normalidad, aplique la transformación correspondiente para cada variable (puede aplicar la transformación de potencia u otra transformación).
+
+```{r, warning=FALSE}
+
+```
+
+3.  ¿Sería apropiado considerar un valor de 150 calorías en promedio para las bebidas de Starbucks?
+
+<!-- -->
+
+a.  Plantee su prueba de hipótesis.
+
+$$
+H_0: \\
+H_1:
+$$
+
+b.  Realice la prueba para la inferencia sobre la media de las calorías. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función integrada en R (`t.test()`)
+
+```{r, warning=FALSE}
+
+```
+
+c.  Indique los intervalos del 95% de confiabilidad para la inferencia de la media de las calorías. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función integrada en R (`t.test()`)
+
+```{r, warning=FALSE}
+
+```
+
+d.  Concluya respecto a su hipótesis.
+
+-   *Conclusión:*
+
+4.  ¿Sería apropiado considerar valores de 20 gramos de carbohidratos en promedio para las bebidas de Starbucks?
+
+<!-- -->
+
+a.  Plantee su prueba de hipótesis.
+
+$$
+H_0: \\
+H_1:
+$$
+
+b.  Realice la prueba para la inferencia sobre la media de los carbohidratos Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función integrada en R (`t.test()`)
+
+```{r, warning=FALSE}
+
+```
+
+c.  Indique los intervalos del 95% de confiabilidad para la inferencia de la media de los carbohidratos. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función integrada en R (`t.test()`)
+
+```{r, warning=FALSE}
+
+```
+
+d.  Concluya respecto a su hipótesis.
+
+-   *Conclusión:*
+
+## Parte 2: Evaluación de la media de 2 variables
+
+A partir de la misma base de datos con la información nutricional de las bebidas del menú de Starbucks, se desean realizar inferencias sobre la media de ambas variables
+
+1.  Evalúe la normalidad bivariada (*Gamma plot*) de las variables bajo un nivel de significancia del 1%.
+
+```{r, warning=FALSE}
+
+```
+
+2.  En caso de no cumplir con el supuesto de normalidad, aplique la transformación correspondiente para cada variable (puede aplicar la transformación de potencia u otra transformación).
+
+```{r, warning=FALSE}
+
+```
+
+3.  ¿Sería apropiado considerar una media de $(120,25)$ para las calorías y los gramos de carbohidratos de las bebidas de Starbucks?
+
+<!-- -->
+
+a.  Plantee su prueba de hipótesis.
+
+$$
+H_0: \\
+H_1: 
+$$
+
+b.  Realice la prueba para la inferencia sobre la media. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función `HottelingsT2Test()` de la librería [Desctools](https://search.r-project.org/CRAN/refmans/DescTools/html/HotellingsT.html).
+
+```{r, warning=FALSE}
+
+```
+
+c.  Indique las elipses del 95% de confiabilidad para la inferencia de la media de las calorías. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*). También existe una función (`MVcis()`) de la librería [mvdalab](https://rdrr.io/cran/mvdalab/man/MVcis.html), aunque su estética no es tan buena.
+
+```{r, warning=FALSE}
+
+
+```
+
+d.  Concluya respecto a su hipótesis.
+
+-   *Conclusión:*
