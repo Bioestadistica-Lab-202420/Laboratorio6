@@ -129,6 +129,43 @@ Cada uno de los datos para estas variables fueron registrados en la hoja de cál
 1.  Evalúe la normalidad univariada (*Q-Q plot*) de las variables bajo un nivel de significancia del 1%.
 
 ```{r, warning=FALSE}
+#primero hay que ver si vaiables son normales, si no, me toca transformar con gamma
+library(readxl)
+datos_starbucks <- read_excel("Datos_Starbucks.xlsx")
+
+datos_starbucks
+
+#Variable 1, calorias  ____________________________________________________________
+filtro_x1 <- data.frame(datos_starbucks)[, c("Calories")]
+x1 <- na.omit(filtro_x1)
+
+x1_sorted <- sort(x1) # Ordenar los datos de menor a mayor
+n1 <- length(x1) # calcular el numero de observaciones en la muestra
+n1
+j1 <- seq(1, n1, 1) # crear un contador de 1 hasta el numero de datos
+samplequartil_x1 <- (j1-1/2)/n1 # calcular el sample quartil 
+# calcular el valor de la distribucion normal standard que corresponde a este nivel de acumulacion de probabilidad
+q1 <- qnorm(samplequartil_x1)
+
+plot(q1, x1_sorted, col = "blue", pch = 19, main = "Scatter Plot X1", xlab = "normal standard value", ylab = "sample value")
+r1 <- cor(cbind(q1, x1_sorted))
+r1
+
+#Variable 2, velocidad del viento _______________________________________________
+filtro_x2 <- data.frame(datos_starbucks)[, c("Carbs")]
+x2 <- na.omit(filtro_x2)
+
+x2_sorted <- sort(x2) # Ordenar los datos de menor a mayor
+n2 <- length(x2) # calcular el numero de observaciones en la muestra
+n2
+j2 <- seq(1, n2, 1) # crear un contador de 1 hasta el numero de datos
+samplequartil_x2 <- (j2-1/2)/n2 # calcular el sample quartil 
+# calcular el valor de la distribucion normal standard que corresponde a este nivel de acumulacion de probabilidad
+q2 <- qnorm(samplequartil_x2)
+
+plot(q2, x2_sorted, col = "blue", pch = 19, main = "Scatter Plot X2", xlab = "normal standard value", ylab = "sample value")
+r2 <- cor(cbind(q2, x2_sorted))
+r2
 
 ```
 
