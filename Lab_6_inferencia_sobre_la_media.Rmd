@@ -144,12 +144,12 @@ j1 <- seq(1, n1, 1) # crear un contador de 1 hasta el numero de datos
 samplequartil_x1 <- (j1-1/2)/n1 # calcular el sample quartil 
 # calcular el valor de la distribucion normal standard que corresponde a este nivel de acumulacion de probabilidad
 q1 <- qnorm(samplequartil_x1)
+r1 <- cor(cbind(q1, x1_sorted))
 
 paste("Número de datos x1:", n1)
 paste("Coeficiente de correlación x1:", r1[1, 2])
 
 plot(q1, x1_sorted, col = "blue", pch = 19, main = "Scatter Plot X1", xlab = "normal standard value", ylab = "sample value")
-r1 <- cor(cbind(q1, x1_sorted))
 
 #Variable 2, carbohidratos _______________________________________________
 filtro_x2 <- data.frame(datos_starbucks)[, c("Carbs")]
@@ -248,25 +248,29 @@ d.  Concluya respecto a su hipótesis.
 a.  Plantee su prueba de hipótesis.
 
 $$
-H_0: \\
-H_1:
+H_0:  \mu_2 = 20\\
+H_1: \mu_2 \neq 20
 $$
 
 b.  Realice la prueba para la inferencia sobre la media de los carbohidratos Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función integrada en R (`t.test()`)
 
 ```{r, warning=FALSE}
+test_x2 <- t.test(x2, alternative = "two.sided", mu = 20)
 
+print(test_x2)
 ```
 
 c.  Indique los intervalos del 95% de confiabilidad para la inferencia de la media de los carbohidratos. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función integrada en R (`t.test()`)
 
 ```{r, warning=FALSE}
+intervalo_x2 <- test_x2$conf.int
+print(intervalo_x2)
 
 ```
 
 d.  Concluya respecto a su hipótesis.
 
--   *Conclusión:*
+-   *Conclusión:* Con una confianza del 95%, se rechaza H0 dado que un valor de media $\mu_2$ de $20$ no esta en el intervalo de confianza $[24.68918, 25.47082]$ y, además, el p-value obtenido en el test da mucho menor a 5%, que es la significancia. Entonces, no sería apropiado considerar valores de 20 gramos de carbohidratos en promedio para las bebidas de Starbucks.
 
 ## Parte 2: Evaluación de la media de 2 variables
 
