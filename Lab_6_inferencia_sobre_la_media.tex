@@ -1,0 +1,702 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Lab 5 - Inferencia sobre la media},
+  pdfauthor={Diego Martinez},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Lab 5 - Inferencia sobre la media}
+\author{Diego Martinez}
+\date{2024-10-10}
+
+\begin{document}
+\maketitle
+
+\section{Laboratorio 6: Inferencias sobre la media de una
+población}\label{laboratorio-6-inferencias-sobre-la-media-de-una-poblaciuxf3n}
+
+\subsubsection{Lecturas recomendadas}\label{lecturas-recomendadas}
+
+\begin{itemize}
+\tightlist
+\item
+  Capítulo 5.4 - Johnson, Richard A.; Wichern, Dean W. (2007). Applied
+  Multivariate Statistical Analysis. Pearson Education.
+  \href{https://www.webpages.uidaho.edu/~stevel/519/Applied\%20Multivariate\%20Statistical\%20Analysis\%20by\%20Johnson\%20and\%20Wichern.pdf}{https://www.webpages.uidaho.edu/book-link.pdf}
+\end{itemize}
+
+\subsubsection{Instalaciones previas para poder generar el documento en
+PDF del
+archivo}\label{instalaciones-previas-para-poder-generar-el-documento-en-pdf-del-archivo}
+
+Para poder generar el documento en PDF será necesario instalar nuevas
+librerías (adicional a la de \texttt{knitr}). Para esto deberán copiar y
+pegar los siguientes comandos en la consola de R
+
+\begin{verbatim}
+install.packages("knitr") 
+install.packages("rmarkdown") 
+install.packages("tinytex") 
+tinytex::install_tinytex()
+\end{verbatim}
+
+\begin{quote}
+En el caso de que ya tuvieran instaladas estas librerías les aparecerá
+una ventana indicando si desean reiniciar la sesión de R para actualizar
+o instalar dichas librerías. Tendrán que seleccionar ``Si''. Esto
+reiniciará la sesión de R y volverá a aparecer la misma ventana. En esta
+oportunidad deberán seleccionar la opción ``No'' para poder continuar
+con la instalación (o actualización) de estas librerías.
+\end{quote}
+
+\subsection{El caso univariado}\label{el-caso-univariado}
+
+En el caso de una sola variable se puede plantear la siguiente
+hipótesis:
+
+\[
+H_0:\mu = \mu_o \\
+H_1:\mu \neq \mu_o
+\]
+
+\(H_o\) es la hipótesis nula y \(H_1\) es la hipótesis alterna de dos
+colas. Si \(x_{1,} x_{2\;,} x_3 ,\ldotp \ldotp \ldotp \ldotp x_n\)
+denotan una muestra aleatoria de una población normal, el test
+estadístico que nos sirva para evaluar \(H_o\) es:
+\(t=\frac{\left(\bar{X} -\mu_o \right)}{\frac{s}{\sqrt{n}}}\) donde,
+\(\bar{X}\) y \(s\) son la media y la desviación estandar de la muestra.
+Uno rechaza \(H_o\) si el valor observado de \(\left|t\right|\) excede
+un valor critico de la distribución t con n-1 grados de libertad (df).
+Rechazar \(H_o\) si \(\left|t\right|\) es grande es lo mismo que
+rechazar \(H_o\) si \(t^2\) es grande:
+
+\[
+t^2 =\frac{{n\left(\bar{X} -\mu_o \right)}^2 }{s^2 }=n\left(\bar{X} -\mu_o \right){\left(s^2 \right)}^{-1} \left(\bar{X} -\mu_o \right)
+\]
+
+\(t^2\) es la distancia al cuadrado de la media de la muestra
+\(\bar{X}\) a \(\mu_{0}\). Las unidades están expresadas en unidades de
+\(\frac{s}{\sqrt{n}}\). Una vez \(\bar{X}\) y \(s^2\) se observa (de la
+muestra) el test se convierte en: rechazo \(H_o\) si:
+
+\[
+n\left(\bar{X} -\mu_o \right){\left(s^2 \right)}^{-1} \left(\bar{X} -\mu_o \right)>{t_{n-1} }^2 \left(\frac{\alpha }{2}\right)
+\]
+
+donde \({t_{n-1} }^2 \left(\frac{\alpha }{2}\right)\) denota el
+percentil superior \(100\left(\frac{\alpha }{2}\right)\) de la
+distribución \(t\) con \(n-1\) df.
+
+Si \(H_o\) no se rechaza se concluye que \(\mu_o\) es un valor posible
+de la media de la población. El intervalo de confianza contiene los
+valores de \(\mu_o\) que pasan la prueba de hipótesis y se convierten en
+la región de posibles valores de la media.
+
+\[ 
+\left(\bar{X} -{t_{n-1} }^2 \left(\frac{\alpha }{2}\right)*\frac{s}{\sqrt{n}}\right)\le \mu_o \le \left(\bar{X} +{t_{n-1} }^2 \left(\frac{\alpha }{2}\right)*\frac{s}{\sqrt{n}}\right) 
+\]
+
+Este intervalo es un intervalo aleatorio en la medida que antes de
+colectar la media y la varianza existen muchos intervalos posibles. De
+esta manera la potabilidad que intervalo contenga \(\mu\) es
+\(\left(1-\frac{\alpha }{2}\right)\).
+
+\subsection{El caso de más de una
+variable}\label{el-caso-de-muxe1s-de-una-variable}
+
+si X tiene más de 1 columna, con variables correlacionadas las conceptos
+anteriores se pueden extender de forma natural. La distancia entre
+\(\bar{X}\) y \(\mu_{o}\) (ahora vectores con las dimensiones de las
+columnas de X) es:
+
+\[ 
+T^2 =n\left(\bar{X} -\mu_o \right){\left(S^2 \right)}^{-1} \left(\bar{X} -\mu_o \right) 
+\]
+
+donde S es la matriz varianza-covarianza. Si \(T^2\) es muy grande
+\(\bar{X}\) y \(\mu\) estan muy lejos el uno del otro. \(T^2\) esta
+distribuida \(\frac{p\left(n-1\right)}{n-p}F_{p,n-p}\) es decir una
+distribución F con p,n-p df.
+
+En la construcción de \(T^2\) note que \(\left(\bar{X} -\mu_o \right)\)
+tiene distribución normal, \({\left(S^2 \right)}^{-1}\) tiene
+distribución normal, de tal manera que la multiplicación de Normal x Chi
+x Normal resulta en una F. Al igual que el caso univariado, rechazo si
+T2 es muy grande:
+
+\[ 
+T^2 > \frac{p\left(n-1\right)}{n-p}F_{p,n-p} \left(\alpha \right) 
+\]
+
+Este indicador se conoce como la \textbf{prueba de Hotelling}. Para una
+sola variable se usa la prueba t y para p variables la prueba F.
+
+\subsection{Regiones de confianza}\label{regiones-de-confianza}
+
+Si \(\theta\) es un vector de parámetros desconocidos sobre una
+población y \(\ominus\) es el set de todos los posibles valores de
+\(\theta\), una región de confianza es una región de valores posibles de
+\(\theta\). Esta región esta determinada por los datos y la denotamos
+como \(R(X)\) donde \(X=X_1 ,X_2 ,\ldotp \ldotp \ldotp X_p\). Una región
+\(R(X)\) se denota como una región de confianza al
+\(100\left(\frac{\alpha }{2}\right)\), si:
+
+\[ 
+P\left\lbrack R\left(X\right)\;\mathrm{will}\;\mathrm{cover}\;\theta \right\rbrack =\;1-\alpha
+\]
+
+La región de confianza para una población de media \(\mu\) y \(p\)
+dimensiones está definida por:
+
+\[
+P\left\lbrack n\left(\bar{X} -\mu_o \right){\left(S^2 \right)}^{-1} \left(\bar{X} -\mu_o \right)\le \frac{p\left(n-1\right)}{n-p}F_{p,n-p} \left(\alpha \right)\right\rbrack =1-\alpha
+\]
+
+Cuando \(p\) es igual a 2, se puede construir un elipsoide de confianza
+y sus longitudes relativas basado en los valores propios \(\lambda_i\) y
+los vectores propios \(e_i\) de \(S\):
+
+\[
+\bar{X} \pm {\sqrt{\lambda }}_i \sqrt{\frac{p\left(n-1\right)}{n-p}F_{p,n-p} \left(\alpha \right)}e_i
+\]
+
+El elipsoide se puede construir con su respectiva ecuación paramétrica:
+
+\[
+X=\bar{X}+a*\cos{t}*e_1+b*\sin{t}*e_2
+\]
+
+Donde \(e_1\) y \(e_2\) corresponden a los valores propios de \(S\), y
+\(a\) y \(b\) corresponden a los semiejes de la elipse, los cuales están
+definidos por los valores propios de \(S\):
+
+\[
+a=\ \sqrt{\lambda_1}\sqrt{\frac{\left(n-1\right)p}{\left(n-p\right)}F_{p,n-p\left(\alpha\right)}} \\
+b=\ \sqrt{\lambda_2}\sqrt{\frac{\left(n-1\right)p}{\left(n-p\right)}F_{p,n-p\left(\alpha\right)}}
+\]
+
+\section{Ejercicios}\label{ejercicios}
+
+\subsection{Parte 1: Evaluación de la media de una
+variable}\label{parte-1-evaluaciuxf3n-de-la-media-de-una-variable}
+
+Starbucks, una cadena de cafés estadounidense fundada en Seattle, creó
+una base de datos con la información nutricional de todas las bebidas
+que ofrece en su menú como parte de una evaluación de nutrición en salud
+pública realizada por la OMS. Toda la información nutricional de las
+bebidas corresponde a una ración de 12 onzas. De las 6 variables
+nutricionales indicadas\footnote{\url{https://www.kaggle.com/datasets/starbucks/starbucks-menu}},
+se seleccionaron únicamente dos:
+
+\begin{itemize}
+\item
+  \(X_1\): Calorías
+\item
+  \(X_2\): Carbohidratos (g)
+\end{itemize}
+
+Cada uno de los datos para estas variables fueron registrados en la hoja
+de cálculo ``Datos\_Starbucks.xlsx''. Para estas dos variables:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Evalúe la normalidad univariada (\emph{Q-Q plot}) de las variables
+  bajo un nivel de significancia del 1\%.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#primero hay que ver si vaiables son normales, si no, me toca transformar con gamma}
+\FunctionTok{library}\NormalTok{(readxl)}
+\NormalTok{datos\_starbucks }\OtherTok{\textless{}{-}} \FunctionTok{read\_excel}\NormalTok{(}\StringTok{"Datos\_Starbucks.xlsx"}\NormalTok{)}
+
+
+\CommentTok{\#Variable 1, calorias  \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}
+\NormalTok{filtro\_x1 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(datos\_starbucks)[, }\FunctionTok{c}\NormalTok{(}\StringTok{"Calories"}\NormalTok{)]}
+\NormalTok{x1 }\OtherTok{\textless{}{-}} \FunctionTok{na.omit}\NormalTok{(filtro\_x1)}
+
+\NormalTok{x1\_sorted }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(x1) }\CommentTok{\# Ordenar los datos de menor a mayor}
+\NormalTok{n1 }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(x1) }\CommentTok{\# calcular el numero de observaciones en la muestra}
+\NormalTok{j1 }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, n1, }\DecValTok{1}\NormalTok{) }\CommentTok{\# crear un contador de 1 hasta el numero de datos}
+\NormalTok{samplequartil\_x1 }\OtherTok{\textless{}{-}}\NormalTok{ (j1}\DecValTok{{-}1}\SpecialCharTok{/}\DecValTok{2}\NormalTok{)}\SpecialCharTok{/}\NormalTok{n1 }\CommentTok{\# calcular el sample quartil }
+\CommentTok{\# calcular el valor de la distribucion normal standard que corresponde a este nivel de acumulacion de probabilidad}
+\NormalTok{q1 }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(samplequartil\_x1)}
+\NormalTok{r1 }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(q1, x1\_sorted))}
+
+\FunctionTok{paste}\NormalTok{(}\StringTok{"Número de datos x1:"}\NormalTok{, n1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Número de datos x1: 75"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{paste}\NormalTok{(}\StringTok{"Coeficiente de correlación x1:"}\NormalTok{, r1[}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Coeficiente de correlación x1: 0.961379246262865"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(q1, x1\_sorted, }\AttributeTok{col =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{, }\AttributeTok{main =} \StringTok{"Scatter Plot X1"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"normal standard value"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"sample value"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Lab_6_inferencia_sobre_la_media_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Variable 2, carbohidratos \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}
+\NormalTok{filtro\_x2 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(datos\_starbucks)[, }\FunctionTok{c}\NormalTok{(}\StringTok{"Carbs"}\NormalTok{)]}
+\NormalTok{x2 }\OtherTok{\textless{}{-}} \FunctionTok{na.omit}\NormalTok{(filtro\_x2)}
+
+\NormalTok{x2\_sorted }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(x2) }\CommentTok{\# Ordenar los datos de menor a mayor}
+\NormalTok{n2 }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(x2) }\CommentTok{\# calcular el numero de observaciones en la muestra}
+\NormalTok{j2 }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, n2, }\DecValTok{1}\NormalTok{) }\CommentTok{\# crear un contador de 1 hasta el numero de datos}
+\NormalTok{samplequartil\_x2 }\OtherTok{\textless{}{-}}\NormalTok{ (j2}\DecValTok{{-}1}\SpecialCharTok{/}\DecValTok{2}\NormalTok{)}\SpecialCharTok{/}\NormalTok{n2 }\CommentTok{\# calcular el sample quartil }
+\CommentTok{\# calcular el valor de la distribucion normal standard que corresponde a este nivel de acumulacion de probabilidad}
+\NormalTok{q2 }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(samplequartil\_x2)}
+
+\FunctionTok{plot}\NormalTok{(q2, x2\_sorted, }\AttributeTok{col =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{, }\AttributeTok{main =} \StringTok{"Scatter Plot X2"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"normal standard value"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"sample value"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Lab_6_inferencia_sobre_la_media_files/figure-latex/unnamed-chunk-1-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{r2 }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(q2, x2\_sorted))}
+\FunctionTok{paste}\NormalTok{(}\StringTok{"Número de datos x2:"}\NormalTok{, n2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Número de datos x2: 75"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{paste}\NormalTok{(}\StringTok{"Coeficiente de correlación x2:"}\NormalTok{, r2[}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Coeficiente de correlación x2: 0.9835673219714"
+\end{verbatim}
+
+\begin{itemize}
+\item
+  \textbf{\emph{Conclusiones:}}
+
+  \emph{\textbf{Normalidad de X1:} Como el valor de r crítico para un
+  n=75 y una significancia del 0.01 es de 0.9771, y el coeficiente de
+  correlación (r1) entre q1 y x1\_sorted es 0.9614, tenemos que r1
+  \textless{} r crítico y, por ende, se rechaza H0; es decir, los datos
+  de calorias de las bebidas de Starbucks no conforman una distribución
+  normal.}
+
+  \textbf{Normalidad de X2:} \emph{Como el valor de r crítico para un
+  n=75 y una significancia del 0.01 es de 0.9771, y el coeficiente de
+  correlación (r2) entre q2 y x2\_sorted es 0.9836, tenemos que r2
+  \textgreater{} r crítico y, por ende, no se rechaza H0; es decir, los
+  datos de carbohidratos de las bebidas de Starbucks conforman una
+  distribución normal.}
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  En caso de no cumplir con el supuesto de normalidad, aplique la
+  transformación correspondiente para cada variable (puede aplicar la
+  transformación de potencia u otra transformación).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#Aplicamos transformación gamma solo a la variable x1}
+\FunctionTok{source}\NormalTok{(}\StringTok{"./funciones/power\_transformation.R"}\NormalTok{)}
+\NormalTok{result }\OtherTok{\textless{}{-}} \FunctionTok{power\_transformation}\NormalTok{(}\FunctionTok{as.matrix}\NormalTok{(datos\_starbucks}\SpecialCharTok{$}\NormalTok{Calories))}
+\NormalTok{l }\OtherTok{\textless{}{-}}\NormalTok{ result}\SpecialCharTok{$}\NormalTok{l }\CommentTok{\#diferentes valores de lambda}
+\NormalTok{f }\OtherTok{\textless{}{-}}\NormalTok{ result}\SpecialCharTok{$}\NormalTok{F\_m}
+\NormalTok{lambda }\OtherTok{\textless{}{-}}\NormalTok{ result}\SpecialCharTok{$}\NormalTok{lambda}
+\NormalTok{maxf }\OtherTok{\textless{}{-}}\NormalTok{ result}\SpecialCharTok{$}\NormalTok{fmax}
+
+\CommentTok{\# Plot l vs. f}
+\FunctionTok{plot}\NormalTok{(l, f, }\AttributeTok{type =} \StringTok{"l"}\NormalTok{)}
+
+\CommentTok{\# Add lambda vs. maxf to the plot}
+\FunctionTok{points}\NormalTok{(lambda, maxf, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Lab_6_inferencia_sobre_la_media_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{paste}\NormalTok{(}\StringTok{"Lambda"}\NormalTok{, lambda)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Lambda 0.55"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#aplico transformación}
+\NormalTok{x1\_transformado }\OtherTok{\textless{}{-}}\NormalTok{ (x1 }\SpecialCharTok{\^{}}\NormalTok{ lambda  }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{) }\SpecialCharTok{/}\NormalTok{ lambda}
+
+\CommentTok{\#reviso normalidad}
+\NormalTok{x1\_sorted }\OtherTok{\textless{}{-}} \FunctionTok{sort}\NormalTok{(x1\_transformado) }\CommentTok{\# Ordenar los datos de menor a mayor}
+\NormalTok{n1 }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(x1\_transformado) }\CommentTok{\# calcular el numero de observaciones en la muestra}
+\NormalTok{j1 }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, n1, }\DecValTok{1}\NormalTok{) }\CommentTok{\# crear un contador de 1 hasta el numero de datos}
+\NormalTok{samplequartil\_x1 }\OtherTok{\textless{}{-}}\NormalTok{ (j1}\DecValTok{{-}1}\SpecialCharTok{/}\DecValTok{2}\NormalTok{)}\SpecialCharTok{/}\NormalTok{n1 }\CommentTok{\# calcular el sample quartil }
+\CommentTok{\# calcular el valor de la distribucion normal standard que corresponde a este nivel de acumulacion de probabilidad}
+\NormalTok{q1 }\OtherTok{\textless{}{-}} \FunctionTok{qnorm}\NormalTok{(samplequartil\_x1)}
+
+\FunctionTok{paste}\NormalTok{(}\StringTok{"Número de datos x1:"}\NormalTok{, n1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Número de datos x1: 75"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{paste}\NormalTok{(}\StringTok{"Coeficiente de correlación x1:"}\NormalTok{, r1[}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Coeficiente de correlación x1: 0.961379246262865"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(q1, x1\_sorted, }\AttributeTok{col =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{pch =} \DecValTok{19}\NormalTok{, }\AttributeTok{main =} \StringTok{"Scatter Plot X1"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"normal standard value"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"sample value"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Lab_6_inferencia_sobre_la_media_files/figure-latex/unnamed-chunk-2-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{r1 }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(q1, x1\_sorted))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  ¿Sería apropiado considerar un valor de 150 calorías en promedio para
+  las bebidas de Starbucks?
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Plantee su prueba de hipótesis.
+\end{enumerate}
+
+\[
+H_0 = 150 \\
+H_1:
+\]
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\item
+  Realice la prueba para la inferencia sobre la media de las calorías.
+  Pueden utilizar el material de la clase de teoría (\emph{``Lecturas y
+  Material suplementario'' \textgreater{} ``Material de la clase en
+  R''}) o la función integrada en R (\texttt{t.test()})
+\item
+  Indique los intervalos del 95\% de confiabilidad para la inferencia de
+  la media de las calorías. Pueden utilizar el material de la clase de
+  teoría (\emph{``Lecturas y Material suplementario'' \textgreater{}
+  ``Material de la clase en R''}) o la función integrada en R
+  (\texttt{t.test()})
+\item
+  Concluya respecto a su hipótesis.
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{Conclusión:}
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  ¿Sería apropiado considerar valores de 20 gramos de carbohidratos en
+  promedio para las bebidas de Starbucks?
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Plantee su prueba de hipótesis.
+\end{enumerate}
+
+\[
+H_0:  \mu_2 = 20\\
+H_1: \mu_2 \neq 20
+\]
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Realice la prueba para la inferencia sobre la media de los
+  carbohidratos Pueden utilizar el material de la clase de teoría
+  (\emph{``Lecturas y Material suplementario'' \textgreater{} ``Material
+  de la clase en R''}) o la función integrada en R (\texttt{t.test()})
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{test\_x2 }\OtherTok{\textless{}{-}} \FunctionTok{t.test}\NormalTok{(x2, }\AttributeTok{alternative =} \StringTok{"two.sided"}\NormalTok{, }\AttributeTok{mu =} \DecValTok{20}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(test\_x2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  One Sample t-test
+## 
+## data:  x2
+## t = 25.899, df = 74, p-value < 2.2e-16
+## alternative hypothesis: true mean is not equal to 20
+## 95 percent confidence interval:
+##  24.68918 25.47082
+## sample estimates:
+## mean of x 
+##     25.08
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Indique los intervalos del 95\% de confiabilidad para la inferencia de
+  la media de los carbohidratos. Pueden utilizar el material de la clase
+  de teoría (\emph{``Lecturas y Material suplementario'' \textgreater{}
+  ``Material de la clase en R''}) o la función integrada en R
+  (\texttt{t.test()})
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{intervalo\_x2 }\OtherTok{\textless{}{-}}\NormalTok{ test\_x2}\SpecialCharTok{$}\NormalTok{conf.int}
+\FunctionTok{print}\NormalTok{(intervalo\_x2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 24.68918 25.47082
+## attr(,"conf.level")
+## [1] 0.95
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Concluya respecto a su hipótesis.
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{Conclusión:} Con una confianza del 95\%, se rechaza H0 dado que
+  un valor de media \(\mu_2\) de \(20\) no esta en el intervalo de
+  confianza \([24.68918, 25.47082]\) y, además, el p-value obtenido en
+  el test da mucho menor a 5\%, que es la significancia. Entonces, no
+  sería apropiado considerar valores de 20 gramos de carbohidratos en
+  promedio para las bebidas de Starbucks.
+\end{itemize}
+
+\subsection{Parte 2: Evaluación de la media de 2
+variables}\label{parte-2-evaluaciuxf3n-de-la-media-de-2-variables}
+
+A partir de la misma base de datos con la información nutricional de las
+bebidas del menú de Starbucks, se desean realizar inferencias sobre la
+media de ambas variables
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Evalúe la normalidad bivariada (\emph{Gamma plot}) de las variables
+  bajo un nivel de significancia del 1\%.
+\item
+  En caso de no cumplir con el supuesto de normalidad, aplique la
+  transformación correspondiente para cada variable (puede aplicar la
+  transformación de potencia u otra transformación).
+\item
+  ¿Sería apropiado considerar una media de \((120,25)\) para las
+  calorías y los gramos de carbohidratos de las bebidas de Starbucks?
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Plantee su prueba de hipótesis.
+\end{enumerate}
+
+\[
+H_0: \\
+H_1: 
+\]
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\item
+  Realice la prueba para la inferencia sobre la media. Pueden utilizar
+  el material de la clase de teoría (\emph{``Lecturas y Material
+  suplementario'' \textgreater{} ``Material de la clase en R''}) o la
+  función \texttt{HottelingsT2Test()} de la librería
+  \href{https://search.r-project.org/CRAN/refmans/DescTools/html/HotellingsT.html}{Desctools}.
+\item
+  Indique las elipses del 95\% de confiabilidad para la inferencia de la
+  media de las calorías. Pueden utilizar el material de la clase de
+  teoría (\emph{``Lecturas y Material suplementario'' \textgreater{}
+  ``Material de la clase en R''}). También existe una función
+  (\texttt{MVcis()}) de la librería
+  \href{https://rdrr.io/cran/mvdalab/man/MVcis.html}{mvdalab}, aunque su
+  estética no es tan buena.
+\item
+  Concluya respecto a su hipótesis.
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{Conclusión:}
+\end{itemize}
+
+\end{document}
