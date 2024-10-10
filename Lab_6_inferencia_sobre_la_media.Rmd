@@ -189,7 +189,8 @@ $$
 b.  Realice la prueba para la inferencia sobre la media de las calorías. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función integrada en R (`t.test()`)
 
 ```{r, warning=FALSE}
-
+test <- t.test(datos$Carbs, , alternative = "two.sided", mu=20)
+print(test)
 ```
 
 c.  Indique los intervalos del 95% de confiabilidad para la inferencia de la media de las calorías. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función integrada en R (`t.test()`)
@@ -236,6 +237,29 @@ A partir de la misma base de datos con la información nutricional de las bebida
 1.  Evalúe la normalidad bivariada (*Gamma plot*) de las variables bajo un nivel de significancia del 1%.
 
 ```{r, warning=FALSE}
+
+
+source("./funciones/bivariate_normality.R")
+
+filtro <- data.frame(datos_starbucks)[, c("Calories", "Carbs")]
+datos <- na.omit(filtro)
+
+
+n <- nrow(datos)
+paste("longitud", n)
+
+result <- bivariate_normality(datos)
+T <- result$T
+nvec <- result$nvec
+paste("proporcion", nvec)
+
+# Plot Chi-square vs. sorted generalized distance
+plot(T$ChiSquare, T$GDsorted, type = "p", col = "black", pch = 19, cex = 1.5, xlab = "Chi-Square", ylab = "Generalized Distance (sorted)", main = "Chi-Square vs. Generalized Distance")
+
+r <- cor(T$ChiSquare, T$GDsorted) # calcula el coefficiente de correlacion entre Chi y GD
+print(r)
+
+
 
 ```
 
