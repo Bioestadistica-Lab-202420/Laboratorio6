@@ -283,36 +283,238 @@ A partir de la misma base de datos con la información nutricional de las bebida
 
 ```{r, warning=FALSE}
 
+Datos_Starbucks<-datos_starbucks
 
-source("./funciones/bivariate_normality.R")
+mean_cov_corr_matrices <- function(X) {
+#   %This function computes the Mean(M), the Variance - Covariance Matrix (VC)
+#   %and the Correlation Matrix (R).
+#   % The mean is computed by defining an n by 1 vector (1) that has equal angles
+#   % with all the axes (observations)and the vector 1/(sqrt(n)) has unit
+#   % lenght in the equal angle direction. Consider the vector yi = [x1i x2i
+#   % ...xni](all values for one variable - column in X). The projection of yi
+#   % on the vector 1 (by definition the proyection of x on y is (x'y/(y'y))*y)
+#   % which es equal to (xi1 + x2i + ...xni)/n * 1 -> the mean vector. The mean
+#   % is the proyection of the obeservation vector on the unit lenght vector of
+#   % equal angles and the deviation from mena is the perperdicular distance of
+#   % this two vectors. 
+#   %The Variance - Covariance Matrix contains the variance 
+#   %Skk = (1/(n-1)*sum((xji-mean(yi)^2)
+#   
+#   %in the diagonal and Sik = (1/(n-1)*sum((xji-mean(yi)*(xjk-mean(yk))
+#   %outside the diagonal. The matrix is symetric.
+#   %The sample correlation coefficient (linear association between two
+#                                        %variables). Rik = Sik/(sqrt(Sii)sqrt(Skk)). 
+#   % Is the standarization of the sample covariance provided by the square root of 
+#   #sample variance of each variable.
+#   %
+#   %INPUT X a n by p matrix. n observation on p variables
+#   %
+#   %OUTPUT M Mean p by 1 vector
+#   %       VC Variance - Covariance Matrix. p by p matrix 
+#   %       R Correlation matrix. p by p matrix 
+# 
+# %--------------------------------------------------------------------------
+  
+  
+  # Calcula la media M
+  n <- nrow(X)
+  p <- ncol(X)
+  O <- matrix(1, n, 1)
+  M <- (1/n) * t(X) %*% O
+  
+  # Matriz de desviaciones D
+  Mr <- (1/n) * (O %*% t(O)) %*% as.matrix(X)
+  D <- as.matrix(X) - Mr
+  
+  # Matriz de varianza-covarianza VC
+  VC <- (1/(n-1)) * t(D) %*% D
+  
+  # Matriz de correlación R
+  SD <- sqrt(diag(VC))
+  SDinv <- solve(diag(SD))
+  R <- SDinv %*% VC %*% SDinv
+  
+  return(list(M = M, VC = VC, R = R))
+}
 
-filtro <- data.frame(datos_starbucks)[, c("Calories", "Carbs")]
-datos <- na.omit(filtro)
+bivariate_normality <- function(X) {
+  # detecta normalidad para una y 2+ variables
+  # chequear si X tiene una sola columna o varias
+  if ("data.frame" %in% class(X)){
+    X <- as.matrix(X)
+  }
+  
+  nc <- ncol(X)
+  nr <- nrow(X)
+  if (nc == 1) {
+    # QQ plot
+    xsorted <- sort(X)
+    j <- 1:nr
+    samplequartil <- (j - 0.5) / nr
+    q <- qnorm(samplequartil)
+    T <- data.frame(xsorted = xsorted, samplequartil = samplequartil, q = q)
+    nvec <- NULL
+  } else {
+    result <- mean_cov_corr_matrices(X)
+    M <- result$M
+    print(dim(M))
+    VC <- result$VC
+    print(VC)
+    SI <- solve(VC)
+    print(dim(SI))
+    GD <- numeric(nr)
+    for (i in 1:nr) {
+      GD[i] <- t((X[i,]) - M) %*% SI %*% ((X[i,]) - M)
+    }
+    vc <- qchisq(0.5, nc)
+    nvec <- (nr - sum(GD > vc)) / nr
+    GDsorted <- sort(GD)
+    ChiSquare <- numeric(nr)
+    for (i in 1:nr) {
+      ChiSquare[i] <- qchisq((i - 0.5) / nr, nc)
+    }
+    comparison <- GDsorted > vc
+    Observations <- 1:nr
+    T <- data.frame(Observations = Observations, GDsorted = GDsorted, ChiSquare = ChiSquare, comparison = comparison)
+  }
+  return(list(T = T, nvec = nvec))
+}
 
-
-n <- nrow(datos)
+n <- nrow(Datos_Starbucks)
 paste("longitud", n)
 
-result <- bivariate_normality(datos)
+result <- bivariate_normality(Datos_Starbucks)
+
 T <- result$T
 nvec <- result$nvec
 paste("proporcion", nvec)
-
 # Plot Chi-square vs. sorted generalized distance
-plot(T$ChiSquare, T$GDsorted, type = "p", col = "black", pch = 19, cex = 1.5, xlab = "Chi-Square", ylab = "Generalized Distance (sorted)", main = "Chi-Square vs. Generalized Distance")
+plot(T$ChiSquare, T$GDsorted, type = "p", col = "black", pch = 19, cex =
+1.5, xlab = "Chi-Square", ylab = "Generalized Distance (sorted)", main =
+"Chi-Square vs. Generalized Distance")
 
-r <- cor(T$ChiSquare, T$GDsorted) # calcula el coefficiente de correlacion entre Chi y GD
+
+r <- cor(T$ChiSquare, T$GDsorted) # calcula el coefficiente de correlacion entre Chi y GD)
+print(r)
+
+
+
+
+
+
+```
+
+Conclusiones: Como el valor de r crítico para un n=75 y una significancia del 0.01 es de 0.9771, y el coeficiente de correlación (r) entre ChiSquare y GDsorted es 0.9580723, tenemos que r \< r crítico y, por ende, se rechaza la H0; es decir, los datos no son normales
+
+$$ x^{\lambda} = \begin{cases} (x^{\lambda}-1)/\lambda & \lambda \neq 0 \\ 
+\text{ln} \ \lambda & \lambda = 0 \end{cases} \\ $$
+
+2.  En caso de no cumplir con el supuesto de normalidad, aplique la transformación correspondiente para cada variable (puede aplicar la transformación de potencia u otra transformación).
+
+```{r, warning=FALSE}
+
+x_1 <- Datos_Starbucks$Calories
+x_2 <- Datos_Starbucks$Carbs
+
+lambda_transformacion <- function(lambda, x) {
+  if (lambda == 0) {
+    transformacion <- log(x)  # log transformation for lambda = 0
+  } else {
+    transformacion <- (x^lambda - 1) / lambda  # apply the transformation
+  }
+  return(transformacion)
+}
+
+power_transformation <- function(X) {
+ # ensayar varios valores de lambda 
+ l <- seq(-2, 2, by = 0.01)
+ nl <- length(l)
+ nc <- ncol(X)
+ nr <- nrow(X)
+ F_m <- matrix(0, nrow = nl, ncol = nc)
+ lambda <- numeric(nc)
+ fmax <- numeric(nc)
+ for (p in 1:nc) { #para cada columna de X
+ for (i in 1:nl) { #para cada valor de lambda
+ x <- X[, p] #seleccione la variable
+ if (l[i] != 0) {
+ xl <- ((x^l[i]) - 1) / l[i] #calcule la potencia (x^l-1)/l
+ } else {
+ xl <- log(x) #calcule cuando l es 0 
+ }
+ xlm <- mean(xl) #saque la media 
+ sl <- (xl - xlm)^2 #saque la varianza
+ F_m[i, p] <- -nr/2 * log(1/nr * sum(sl)) + (l[i] - 1) * sum(log(x)) 
+#calcula la funcion de lambda
+ }
+ ix <- which.max(F_m[, p])
+ lambda[p] <- l[ix]
+ fmax[p] <- max(F_m[, p])
+ }
+ return(list(l = l, F_m = F_m, lambda = lambda, fmax = fmax))
+}
+
+result <- power_transformation(as.matrix(x_1))
+l <- result$l
+f <- result$F_m
+lambda1 <- result$lambda
+lambda1
+maxf <- result$fmax
+
+# Plot l vs. f
+plot(l, f, type = "l")
+
+# Add lambda vs. maxf to the plot
+points(lambda1, maxf, col = "red", pch = 19)
+
+
+result2 <- power_transformation(as.matrix(x_2))
+l2 <- result2$l
+f2 <- result2$F_m
+lambda2 <- result2$lambda
+lambda2
+
+maxf <- result2$fmax
+# Plot l vs. f
+plot(l2, f2, type = "l")
+# Add lambda vs. maxf to the plot
+points(lambda2, maxf, col = "red", pch = 19)
+
+transformacion1 <- lambda_transformacion(lambda1,x_1)
+transformacion1
+transformacion2 <- lambda_transformacion(lambda2,x_2)
+transformacion2
+
+
+qqnorm(transformacion1, main = "QQ Plot: Calorias transformados")
+qqline(transformacion1, col = "cyan")
+
+qqnorm(transformacion2, main = "QQ Plot: Carbohidratos transformados")
+qqline(transformacion2, col = "deeppink")
+
+Transformados_Datos_starbucks <- cbind(transformacion1, transformacion2) 
+n3 <- nrow(Transformados_Datos_starbucks)
+paste("longitud", n3)
+
+result3 <- bivariate_normality(Transformados_Datos_starbucks)
+
+T <- result3$T
+nvec <- result$nvec
+paste("proporcion", nvec)
+# Plot Chi-square vs. sorted generalized distance
+plot(T$ChiSquare, T$GDsorted, type = "p", col = "gold", pch = 10, cex =
+1, xlab = "Chi-Square", ylab = "Generalized Distance (sorted)", main =
+"Chi-Square vs. Generalized Distance")
+
+
+r <- cor(T$ChiSquare, T$GDsorted) # calcula el coeficiente de correlacion entre Chi y GD)
 print(r)
 
 
 
 ```
 
-2.  En caso de no cumplir con el supuesto de normalidad, aplique la transformación correspondiente para cada variable (puede aplicar la transformación de potencia u otra transformación).
-
-```{r, warning=FALSE}
-
-```
+Conclusiones: Como el valor del r crítico, después de la transformación, para un n=75 y una significancia del 0.01 es de 0.9771, y el coeficiente de correlación (r) entre ChiSquare y GDsorted es 0.9729087, tenemos que r \< r crítico y, por ende, se rechaza la H0; es decir, los datos aun siguen sin ser normales, no obstante, los datos transformados están muy cerca de ser datos con una distribución norma, por ese motivo, se podría considerar que las razones de que aun siguen sin ser datos con un comportamiento normal, es debido a los outliers o datos mas extremos que se posee en la tabla. Igualmente,Esto sugiere que, aunque los datos transformados no son completamente normales, la transformación ha mejorado notablemente su distribución
 
 3.  ¿Sería apropiado considerar una media de $(120,25)$ para las calorías y los gramos de carbohidratos de las bebidas de Starbucks?
 
@@ -321,23 +523,195 @@ print(r)
 a.  Plantee su prueba de hipótesis.
 
 $$
-H_0: \\
-H_1: 
+H_0: \mu = (120\,,25)\\
+H_1: \mu ≠ (120\,,25)\\
+$$ datos transformados $$
+H_0: \mu = (62.39401\,,23.48569)\\
+H_1: \mu ≠ (62.39401\,,23.48569)\\
 $$
 
 b.  Realice la prueba para la inferencia sobre la media. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*) o la función `HottelingsT2Test()` de la librería [Desctools](https://search.r-project.org/CRAN/refmans/DescTools/html/HotellingsT.html).
 
 ```{r, warning=FALSE}
 
+#Metodo 1
+#se transforma los puntos de (120,25)
+
+transformacion3 <- lambda_transformacion(lambda1,120)
+transformacion4 <- lambda_transformacion(lambda2,25)
+
+transformacion3
+transformacion4
+
+
+
+#Se tomo una significancia de 1%
+result4 <- mean_cov_corr_matrices(Transformados_Datos_starbucks)
+M <- result4$M
+VC <- result4$VC
+
+n <- nrow(Transformados_Datos_starbucks)
+nc <- ncol(Transformados_Datos_starbucks)
+
+Uo <- c(transformacion3,transformacion4)
+T2 <- n * t(M - Uo) %*% solve(VC) %*% (M - Uo)
+T2
+
+Fcritico <- qf(1-0.01, nc, n - nc)
+Fcritico
+
+Tcritico = Fcritico*nc*(n-1)/(n-nc)
+Tcritico
 ```
+
+Como $T^2$ es MENOR que $T_{critico}$ no rechazamos la $H_o$. Ese vector de medias parece sugerir ser un vector adecuado para describir de manera conjunta la medias de las variables
+
+```{r, warning=FALSE}
+
+#Metodo 2
+install.packages("DescTools")
+library(DescTools)
+
+Uo <- c(transformacion3,transformacion4)
+
+X <- as.matrix(Transformados_Datos_starbucks)
+
+hotelling_test <- HotellingsT2Test(X, mu = Uo)
+print(hotelling_test)
+print(hotelling_test$p.value)
+
+# Conclusion:
+if (hotelling_test$p.value < 0.01) {
+  print("Rechazamos la hipotesis nula, sugiriendo que el vector de la media (23.48569, 62.39401) no es el apropiado.")
+} else {
+  print("No Rechazamos la hipotesis nula, sugiriendo que el vector de la media (23.48569, 62.39401) podria ser el apropiado.")
+}
+
+
+```
+
 
 c.  Indique las elipses del 95% de confiabilidad para la inferencia de la media de las calorías. Pueden utilizar el material de la clase de teoría (*"Lecturas y Material suplementario" \> "Material de la clase en R"*). También existe una función (`MVcis()`) de la librería [mvdalab](https://rdrr.io/cran/mvdalab/man/MVcis.html), aunque su estética no es tan buena.
 
 ```{r, warning=FALSE}
+install.packages("mvdalab")
+library(mvdalab)
+#Metodo 1
+X <- as.matrix(Transformados_Datos_starbucks)
+
+result <- mean_cov_corr_matrices(X)
+result$M
+M <- result$M  
+VC <- result$VC  
+
+n <- nrow(X)
+p <- ncol(X)
+
+alpha <- 0.05  # 95% 
+
+eig_result <- eigen(VC)
+eVect <- eig_result$vectors  
+eVal <- eig_result$values    
+
+eVal[c(1, 2)] <- eVal[c(2, 1)]
+eVal <- diag(eVal)
+eVect[, c(1, 2)] <- eVect[, c(2, 1)]
+
+a <- sqrt(eVal[1, 1]) * sqrt(qf(1 - alpha, p, n - p) * p * (n - 1) / (n * (n - p)))  # Axis 1
+b <- sqrt(eVal[2, 2]) * sqrt(qf(1 - alpha, p, n - p) * p * (n - 1) / (n * (n - p)))  # Axis 2
+
+t <- seq(0, 2 * pi, by = 0.01)
+nt <- length(t)
+ellipse_coords <- matrix(0, nrow = nt, ncol = 2)
+for (k in 1:nt) {
+  ellipse_coords[k, ] <- (M + a * cos(t[k]) * eVect[, 1] + b * sin(t[k]) * eVect[, 2])
+}
+
+x1l <- M[1] - sqrt(qf(1 - alpha, p, n - p) * p * (n - 1) / (n * (n - p))) * sqrt(VC[1, 1])
+x1r <- M[1] + sqrt(qf(1 - alpha, p, n - p) * p * (n - 1) / (n * (n - p))) * sqrt(VC[1, 1])
+x2l <- M[2] - sqrt(qf(1 - alpha, p, n - p) * p * (n - 1) / (n * (n - p))) * sqrt(VC[2, 2])
+x2r <- M[2] + sqrt(qf(1 - alpha, p, n - p) * p * (n - 1) / (n * (n - p))) * sqrt(VC[2, 2])
+
+plot(X[, 1], X[, 2], col = rgb(0.1, 0.3, 0.7, alpha = 0.4), pch = 19, cex = 0.8, 
+     main = "Intervalo de confianza para el 95%", 
+     xlim = c(min(X[, 1]), max(X[, 1])), ylim = c(min(X[, 2]), max(X[, 2])),
+     xlab = "Calorias", ylab = "Carbs")
+
+lines(ellipse_coords[, 1], ellipse_coords[, 2], col = "red", lwd = 2)
+
+points(M[1], M[2], col = "red", pch = 19, cex = 1.5)
+
+shadow_x1 <- seq(x1l, x1r, length.out = 100)
+shadow_y1 <- rep(min(X[, 2]), 100)
+lines(shadow_x1, shadow_y1, col = "green", lwd = 3)
+
+shadow_x2 <- rep(min(X[, 1]), 100)
+shadow_y2 <- seq(x2l, x2r, length.out = 100)
+lines(shadow_x2, shadow_y2, col = "green", lwd = 3)
+
+points(X[, 1], X[, 2], col = rgb(0.1, 0.3, 0.7, alpha = 0.5), pch = 19, cex = 0.4)
+points(transformacion3,transformacion4,col ="cyan", alpha = 1.5, pch = 19, label= "Media de $(120,25)$ para las calorías")
+
+legend("topright", legend = c("Puntos de calorias y carbohidratos", "Elipse del 95%", "Media de (120,25)"), 
+       col = c(rgb(0.1, 0.3, 0.7, alpha = 0.5), "red", "cyan"), 
+       pch = c(19, NA, 19), lty = c(NA, 1, NA), lwd = c(NA, 2, NA),
+       pt.cex = c(0.8, NA, 1.5))
+
+ad <- sqrt(eVal[1, 1]) * sqrt(qf(1 - alpha, p, n - p) * p * (n - 1) / (n * (n - p))) * sqrt(VC[1, 1] - 2 * VC[2, 1] + VC[2, 2])
+bd <- sqrt(eVal[2, 2]) * sqrt(qf(1 - alpha, p, n - p) * p * (n - 1) / (n * (n - p))) * sqrt(VC[1, 1] - 2 * VC[2, 1] + VC[2, 2])
+
+t <- seq(0, 2 * pi, by = 0.01)
+nt <- length(t)
+xd <- matrix(0, nrow = nt, ncol = 2)
+
+mean_diff <- M[1] - M[2]
+
+for (k in 1:nt) {
+  xd[k, ] <- (mean_diff + ad * cos(t[k]) * eVect[, 1] + bd * sin(t[k]) * eVect[, 2])
+}
+
+plot(xd[, 1], xd[, 2], type = "p", col = rgb(0.1, 0.3, 0.7, alpha = 0.5), pch = 19, cex = 0.4,
+     main = "Intervalo de confianza de la diferencia entre calorias y carbohidratos",
+     xlab = "Diferencia en Calorias", ylab = "Diferencia en Carbs")
+
+points(mean_diff, 0, col = "red", pch = 19, cex = 1.5)
+
+grid()
+
+
+
+```
+```{r, warning=FALSE}
+
+#Metodo 2
+library(mvdalab)
+#Convertirlo en dataframe
+Transformados_Datos_starbucks_df <- as.data.frame(Transformados_Datos_starbucks)
+
+result_ellipse <- MVcis(Transformados_Datos_starbucks_df,level=0.95)
+
+plot(result_ellipse["Calories"],result_ellipse["Carbs"], main = "intervalo de confianza del 95%", 
+     xlab = "Calorias", ylab = "Carbs", col = "red",xlim = c(min(X[, 1]), max(X[, 1])), ylim = c(min(X[, 2]), max(X[, 2])))
+
+lines(result_ellipse[1], result_ellipse[2], col = "red", lwd = 2)
+
+
+points(X[, 1], X[, 2], col = rgb(0.1, 0.3, 0.7, alpha = 0.5), pch = 19, cex = 0.4)
+
+mean_diff <- mean(X[, 1]) - mean(X[, 2])
+
+points(mean(X[, 1]), mean(X[, 2]), col = "red", pch = 19, cex = 1.5)
+text(mean(X[, 1]), mean(X[, 2]), pos = 4, col = "red")
+
+
+legend("topright", legend = c("Puntos de datos de Starbucks", "Intervalo del 95%", "Media de (62.39401,23.48569)"),
+       col = c(rgb(0.1, 0.3, 0.7, alpha = 0.5), "red", "red"),
+       pch = c(19, NA, 19), lty = c(NA, 1, NA), lwd = c(NA, 2, NA), pt.cex = c(0.8, NA, 1.5))
+
 
 
 ```
 
 d.  Concluya respecto a su hipótesis.
 
--   *Conclusión:*
+-   *Conclusión: Al observar tanto la elipse del método 1 y método 2, al igual que,la prueba para la inferencia sobre la media del punto b), se puede afirma con un 95% de confianza que la media (62.39401,23.48569) es una media apropiada para las calorías y carbohidratos en los datos de Starbucks. Dado que se encuentra el punto (62.39401,23.48569) dentro de la elipse de confianza, no se rechaza la hipótesis nula de *$H_0: \mu = (62.39401\,,23.48569)$.
